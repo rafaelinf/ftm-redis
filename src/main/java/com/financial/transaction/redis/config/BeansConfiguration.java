@@ -18,12 +18,6 @@ public class BeansConfiguration {
 
 	@Value("${http.timeout}")
 	private Integer httpTimeout;
-
-	@Value("${spring.redis.host}")
-	private String redisHost;
-	
-	@Value("${spring.redis.port}")
-	private Integer redisPort;	
 	
 	@Bean
 	public RestTemplate getRestTemplate() {
