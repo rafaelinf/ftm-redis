@@ -19,26 +19,33 @@ public class BeansConfiguration {
 	@Value("${http.timeout}")
 	private Integer httpTimeout;
 
+	@Value("${spring.redis.host}")
+	private String redisHost;
+	
+	@Value("${spring.redis.port}")
+	private Integer redisPort;	
+	
 	@Bean
 	public RestTemplate getRestTemplate() {
 		return new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(httpTimeout))
 				.setReadTimeout(Duration.ofSeconds(httpTimeout)).build();
 	}
 
-//    @Bean
-//    JedisConnectionFactory connectionFactory() {   	    	
-//        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
-//        //redisStandaloneConfiguration.setPassword(RedisPassword.of("password"));     
-//        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
-//        jedisConnectionFactory.getPoolConfig().setMaxIdle(30);
-//        jedisConnectionFactory.getPoolConfig().setMinIdle(10);
-//        return jedisConnectionFactory;
-//    }
+    @Bean
+    JedisConnectionFactory connectionFactory() {   	    	
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
+        //redisStandaloneConfiguration.setPassword(RedisPassword.of("password"));     
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
+        jedisConnectionFactory.getPoolConfig().setMaxIdle(30);
+        jedisConnectionFactory.getPoolConfig().setMinIdle(10);
+        return jedisConnectionFactory;
+    }
+
 	
 	@Bean
 	public RedisTemplate<Object, Object> redisTemplate() {
 		RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
-		//redisTemplate.setConnectionFactory(connectionFactory());
+		redisTemplate.setConnectionFactory(connectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
 		return redisTemplate;
 	}
